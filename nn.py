@@ -1,6 +1,7 @@
 from data import get_mnist
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 """
 w = weights, b = bias, i = input, h = hidden, o = output, l = label
@@ -16,6 +17,7 @@ l2_bias = np.zeros((10, 1))
 learn_rate = 0.01
 nr_correct = 0
 epochs = 3
+p_done = 0
 
 for epoch in range(epochs):
     for img, l in zip(images, labels):
@@ -41,11 +43,17 @@ for epoch in range(epochs):
         l1_weights += -learn_rate * delta_h @ np.transpose(img)
         l1_bias += -learn_rate * delta_h
 
+        if p_done % 100 == 0:
+            print(f"Accuracy : {round((nr_correct / images.shape[0]) * 100, 2)} , Images : {p_done}" ,end = "\r")
+            time.sleep(0.001)
+        p_done += 1
+    p_done = 0
     # Show accuracy for this epoch
     print(f"Acc: {round((nr_correct / images.shape[0]) * 100, 2)}%")
     nr_correct = 0
 
 # Show results
+
 while True:
     index = int(input("Enter a number (0 - 59999): "))
     img = images[index]
