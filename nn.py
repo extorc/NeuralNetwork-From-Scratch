@@ -19,16 +19,22 @@ nr_correct = 0
 epochs = 3
 p_done = 0
 
+def sigmoid(x):
+    sig = 1/(1 + np.exp(-x))
+    return sig
+
+def forward_propogate(bias,weight,neuron):
+    return bias + (weight @ neuron)
+
 for epoch in range(epochs):
     for img, l in zip(images, labels):
         img.shape += (1,)
         l.shape += (1,)
         # Forward propagation input -> hidden
-        h_pre = l1_bias + l1_weights @ img
-        h = 1 / (1 + np.exp(-h_pre))
+        h = sigmoid(forward_propogate(l1_bias,l1_weights,img))
+
         # Forward propagation hidden -> output
-        o_pre = l2_bias + l2_weights @ h
-        o = 1 / (1 + np.exp(-o_pre))
+        o = sigmoid(forward_propogate(l2_bias,l2_weights,h))
 
         # Cost / Error calculation
         e = 1 / len(o) * np.sum((o - l) ** 2, axis=0)
