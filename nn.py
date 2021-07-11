@@ -26,6 +26,10 @@ def sigmoid(x):
 def forward_propogate(bias,weight,neuron):
     return bias + (weight @ neuron)
 
+def back_propogate(weight,bias,rate, delta, neuron):
+    weight += -rate * delta @ np.transpose(neuron)
+    bias += -rate * delta
+
 for epoch in range(epochs):
     for img, l in zip(images, labels):
         img.shape += (1,)
@@ -40,14 +44,11 @@ for epoch in range(epochs):
         e = 1 / len(o) * np.sum((o - l) ** 2, axis=0)
         nr_correct += int(np.argmax(o) == np.argmax(l))
 
-        # Backpropagation output -> hidden (cost function derivative)
         delta_o = o - l
-        l2_weights += -learn_rate * delta_o @ np.transpose(h)
-        l2_bias += -learn_rate * delta_o
-        # Backpropagation hidden -> input (activation function derivative)
+        back_propogate(l2_weights,l2_bias,learn_rate ,delta_o ,h)
+
         delta_h = np.transpose(l2_weights) @ delta_o * (h * (1 - h))
-        l1_weights += -learn_rate * delta_h @ np.transpose(img)
-        l1_bias += -learn_rate * delta_h
+        back_propogate(l1_weights,l1_bias,learn_rate, delta_h , img)
 
         if p_done % 100 == 0:
             print(f"Accuracy : {round((nr_correct / images.shape[0]) * 100, 2)} , Images : {p_done}" ,end = "\r")
