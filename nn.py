@@ -2,6 +2,7 @@ from data import get_mnist
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from functions import *
 
 """
 w = weights, b = bias, i = input, h = hidden, o = output, l = label
@@ -18,17 +19,6 @@ learn_rate = 0.01
 nr_correct = 0
 epochs = 3
 p_done = 0
-
-def sigmoid(x):
-    sig = 1/(1 + np.exp(-x))
-    return sig
-
-def forward_propogate(bias,weight,neuron):
-    return bias + (weight @ neuron)
-
-def back_propogate(weight,bias,rate, delta, neuron):
-    weight += -rate * delta @ np.transpose(neuron)
-    bias += -rate * delta
 
 for epoch in range(epochs):
     for img, l in zip(images, labels):
