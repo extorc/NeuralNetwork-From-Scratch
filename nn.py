@@ -4,11 +4,6 @@ import matplotlib.pyplot as plt
 import time
 from functions import *
 
-"""
-w = weights, b = bias, i = input, h = hidden, o = output, l = label
-e.g. l1_weights = weights from input layer to hidden layer
-"""
-
 images, labels = get_mnist()
 l1_weights = np.random.uniform(-0.5, 0.5, (20, 784))
 l2_weights = np.random.uniform(-0.5, 0.5, (10, 20))
@@ -24,13 +19,10 @@ for epoch in range(epochs):
     for img, l in zip(images, labels):
         img.shape += (1,)
         l.shape += (1,)
-        # Forward propagation input -> hidden
-        h = sigmoid(forward_propogate(l1_bias,l1_weights,img))
 
-        # Forward propagation hidden -> output
+        h = sigmoid(forward_propogate(l1_bias,l1_weights,img))
         o = sigmoid(forward_propogate(l2_bias,l2_weights,h))
 
-        # Cost / Error calculation
         e = 1 / len(o) * np.sum((o - l) ** 2, axis=0)
         nr_correct += int(np.argmax(o) == np.argmax(l))
 
@@ -45,24 +37,18 @@ for epoch in range(epochs):
             time.sleep(0.001)
         p_done += 1
     p_done = 0
-    # Show accuracy for this epoch
+
     print(f"Acc: {round((nr_correct / images.shape[0]) * 100, 2)}%")
     nr_correct = 0
-
-# Show results
 
 while True:
     index = int(input("Enter a number (0 - 59999): "))
     img = images[index]
-    plt.imshow(img.reshape(28, 28), cmap="Greys")
-
     img.shape += (1,)
-    # Forward propagation input -> hidden
-    h_pre = l1_bias + l1_weights @ img.reshape(784, 1)
-    h = 1 / (1 + np.exp(-h_pre))
-    # Forward propagation hidden -> output
-    o_pre = l2_bias + l2_weights @ h
-    o = 1 / (1 + np.exp(-o_pre))
 
+    h = sigmoid(-forward_propogate(l1_bias,l1_weights,img.reshape(784,1)))
+    o = sigmoid(-forward_propogate(l2_bias,l2_weights,h))
     print(o.argmax())
+    time.sleep(5)
+    plt.imshow(img.reshape(28, 28), cmap="Greys")
     plt.show()
