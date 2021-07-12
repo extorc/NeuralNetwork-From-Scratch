@@ -14,8 +14,11 @@ w2 = data[2]
 b2 = data[3]
 
 while True:
-    index = int(input("Enter a number (0 - 59999): "))
-    img = images[index]
+    index = input("Enter a number (0 - 59999): ")
+    if not index == "exit":
+        img = images[int(index)]
+    else :
+        break
     img.shape += (1,)
 
     h = sigmoid(-forward_propogate(b1,w1,img.reshape(784,1)))
