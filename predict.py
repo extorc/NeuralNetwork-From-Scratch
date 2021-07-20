@@ -5,26 +5,33 @@ import time
 from functions import *
 from numpy import save , load
 
-images, labels = get_mnist()
+dataset, labels = get_mnist()
 
 data = load('model.npy',allow_pickle = True)
-w1 = data[0]
-b1 = data[1]
-w2 = data[2]
-b2 = data[3]
+model = []
+
+w1 = data[0][0]
+b1 = data[0][1]
+w2 = data[1][0]
+b2 = data[1][1]
 
 while True:
     index = input("Enter a number (0 - 59999): ")
     if not index == "exit":
-        img = images[int(index)]
+        dts = dataset[int(index)]
     else :
         break
-    img.shape += (1,)
+    dts.shape += (1,)
 
-    h = sigmoid(-forward_propogate(b1,w1,img.reshape(784,1)))
+    h = sigmoid(-forward_propogate(b1,w1,dts.reshape(784,1)))
     o = sigmoid(-forward_propogate(b2,w2,h))
-    plt.plot(o)
-    plt.show()
-    time.sleep(5)
-    plt.imshow(img.reshape(28, 28), cmap="Greys")
+
+    mode = input("Display Mode : ")
+    if mode == "plot":
+        plt.plot(o)
+        plt.show()
+    elif mode == "argmax":
+        print(o.argmax())
+    plt.imshow(dts.reshape(28, 28), cmap="Greys")
+
     plt.show()
