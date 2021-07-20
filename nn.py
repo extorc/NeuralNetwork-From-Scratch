@@ -21,17 +21,17 @@ for epoch in range(epochs):
         dts.shape += (1,)
         l.shape += (1,)
 
-        h = sigmoid(input_layer.forward_propogat(dts))
-        o = sigmoid(hidden_layer1.forward_propogat(h))
+        h = sigmoid(input_layer.forward_propogate(dts))
+        o = sigmoid(hidden_layer1.forward_propogate(h))
 
         e = 1 / len(o) * np.sum((o - l) ** 2, axis=0)
         nr_correct += int(np.argmax(o) == np.argmax(l))
 
         delta_o = o - l
-        hidden_layer1.back_propogat(learn_rate, delta_o , h)
+        hidden_layer1.back_propogate(learn_rate, delta_o , h)
 
         delta_h = layer_error(hidden_layer1,delta_o,h)
-        input_layer.back_propogat(learn_rate, delta_h , dts)
+        input_layer.back_propogate(learn_rate, delta_h , dts)
 
         if p_done % 100 == 0:
             print(f"Accuracy : {round((nr_correct / dataset.shape[0]) * 100, 2)} , dataset : {p_done}" ,end = "\r")

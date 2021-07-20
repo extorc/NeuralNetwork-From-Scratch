@@ -5,9 +5,9 @@ class Layer:
         self.weight = w
         self.bias = b
 
-    def forward_propogat(self,neuron):
+    def forward_propogate(self,neuron):
         return self.bias + (self.weight @ neuron)
 
-    def back_propogat(self,rate, delta, neuron):
+    def back_propogate(self,rate, delta, neuron):
         self.weight += -rate * delta @ np.transpose(neuron)
         self.bias += -rate * delta
