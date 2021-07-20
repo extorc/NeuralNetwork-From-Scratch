@@ -23,7 +23,8 @@ while True:
 
     h = sigmoid(-forward_propogate(b1,w1,img.reshape(784,1)))
     o = sigmoid(-forward_propogate(b2,w2,h))
-    print(o.argmax())
+    plt.plot(o)
+    plt.show()
     time.sleep(5)
     plt.imshow(img.reshape(28, 28), cmap="Greys")
     plt.show()

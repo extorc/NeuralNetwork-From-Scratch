@@ -6,15 +6,14 @@ from numpy import asarray , save
 from layer import Layer
 
 images, labels = get_mnist()
-l2_weights = np.random.uniform(-0.5, 0.5, (10, 20))
-l2_bias = np.zeros((10, 1))
-
 input_layer = Layer(np.random.uniform(-0.5, 0.5, (20, 784)),np.zeros((20, 1)))
-
+hidden_layer1 = Layer(np.random.uniform(-0.5, 0.5, (10, 20)),np.zeros((10, 1)))
+layers = [input_layer,hidden_layer1]
 learn_rate = 0.01
 nr_correct = 0
 epochs = 1
 p_done = 0
+save_model_data = []
 
 for epoch in range(epochs):
     for img, l in zip(images, labels):
@@ -22,13 +21,13 @@ for epoch in range(epochs):
         l.shape += (1,)
 
         h = sigmoid(input_layer.forward_propogat(img))
-        o = sigmoid(forward_propogate(l2_bias,l2_weights,h))
+        o = sigmoid(hidden_layer1.forward_propogat(h))
 
         e = 1 / len(o) * np.sum((o - l) ** 2, axis=0)
         nr_correct += int(np.argmax(o) == np.argmax(l))
 
         delta_o = o - l
-        back_propogate(l2_weights,l2_bias,learn_rate ,delta_o ,h)
+        hidden_layer1.back_propogat(learn_rate, delta_o , h)
 
         delta_h = np.transpose(l2_weights) @ delta_o * (h * (1 - h))
         input_layer.back_propogat(learn_rate, delta_h , img)
@@ -42,5 +41,10 @@ for epoch in range(epochs):
     print(f"Acc: {round((nr_correct / images.shape[0]) * 100, 2)}%")
     nr_correct = 0
 
-data = asarray([input_layer.weight,input_layer.bias,l2_weights,l2_bias])
+for l in layers:
+    save_model_data.append(l.weight)
+    save_model_data.append(l.bias)
+
+data = asarray(save_model_data)
+
 save('model.npy',data)
