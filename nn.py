@@ -9,7 +9,6 @@ class Network:
     def __init__(self,shape,inp,rate,ep):
         self.inp = inp
         self.dataset,self.labels = inp()
-        # dataset, labels = get_mnist()
         self.input_layer = Layer(np.random.uniform(-0.5, 0.5, (shape[1], shape[0])),np.zeros((shape[1], 1)))
         self.hidden_layer1 = Layer(np.random.uniform(-0.5, 0.5, (shape[2], shape[1])),np.zeros((shape[2], 1)))
         self.layers = [self.input_layer,self.hidden_layer1]
@@ -18,6 +17,7 @@ class Network:
         self.epochs = ep
         self.p_done = 0
         self.save_model_data = []
+
     def train(self):
         for epoch in range(self.epochs):
             for dts, l in zip(self.dataset, self.labels):
@@ -45,9 +45,8 @@ class Network:
             print(f"Acc: {round((self.nr_correct / self.dataset.shape[0]) * 100, 2)}%")
             self.nr_correct = 0
 
-        for l in self.layers:
-            self.save_model_data.append([l.weight,l.bias])
-
-        data = asarray(self.save_model_data)
-
-        save('model.npy',data)
+        def save_model(self,name):
+            for l in self.layers:
+                self.save_model_data.append([l.weight,l.bias])
+            data = asarray(self.save_model_data)
+            save(name,data)

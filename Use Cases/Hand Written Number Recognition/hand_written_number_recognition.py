@@ -8,3 +8,4 @@ from nn import *
 
 network = Network([784,20,10],get_mnist,0.01,1)
 network.train()
+network.save_model('model.npy')
